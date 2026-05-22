@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>旅宿探索 · 台灣住宿查詢</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="css/bootstrap.min.css">
 
   <style>
@@ -20,21 +23,29 @@
       --clr-gold-light: #D4A843;
       --clr-gold-pale: #FAF0D7;
       --clr-white: #FFFFFF;
-      --clr-border: rgba(28,26,22,0.12);
-      --clr-border-strong: rgba(28,26,22,0.25);
+      --clr-border: rgba(28, 26, 22, 0.12);
+      --clr-border-strong: rgba(28, 26, 22, 0.25);
       --ff-serif: 'Noto Serif TC', 'Georgia', serif;
       --ff-sans: 'Noto Sans TC', sans-serif;
       --radius-sm: 6px;
       --radius-md: 12px;
       --radius-lg: 20px;
-      --shadow-card: 0 2px 16px rgba(28,26,22,0.08), 0 1px 4px rgba(28,26,22,0.04);
-      --shadow-card-hover: 0 8px 32px rgba(28,26,22,0.14), 0 2px 8px rgba(28,26,22,0.08);
-      --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+      --shadow-card: 0 2px 16px rgba(28, 26, 22, 0.08), 0 1px 4px rgba(28, 26, 22, 0.04);
+      --shadow-card-hover: 0 8px 32px rgba(28, 26, 22, 0.14), 0 2px 8px rgba(28, 26, 22, 0.08);
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       font-family: var(--ff-sans);
@@ -58,21 +69,17 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 80% 60% at 50% 120%, rgba(184,134,11,0.18) 0%, transparent 70%),
-        repeating-linear-gradient(
-          90deg,
+        radial-gradient(ellipse 80% 60% at 50% 120%, rgba(184, 134, 11, 0.18) 0%, transparent 70%),
+        repeating-linear-gradient(90deg,
           transparent,
           transparent 60px,
-          rgba(255,255,255,0.015) 60px,
-          rgba(255,255,255,0.015) 61px
-        ),
-        repeating-linear-gradient(
-          0deg,
+          rgba(255, 255, 255, 0.015) 60px,
+          rgba(255, 255, 255, 0.015) 61px),
+        repeating-linear-gradient(0deg,
           transparent,
           transparent 60px,
-          rgba(255,255,255,0.015) 60px,
-          rgba(255,255,255,0.015) 61px
-        );
+          rgba(255, 255, 255, 0.015) 60px,
+          rgba(255, 255, 255, 0.015) 61px);
       pointer-events: none;
     }
 
@@ -91,7 +98,7 @@
       letter-spacing: 0.25em;
       color: var(--clr-gold-light);
       text-transform: uppercase;
-      border: 1px solid rgba(184,134,11,0.4);
+      border: 1px solid rgba(184, 134, 11, 0.4);
       padding: 5px 18px;
       border-radius: 100px;
       margin-bottom: 20px;
@@ -113,7 +120,7 @@
 
     .site-subtitle {
       font-size: 14px;
-      color: rgba(255,255,255,0.45);
+      color: rgba(255, 255, 255, 0.45);
       letter-spacing: 0.05em;
       font-weight: 300;
     }
@@ -125,7 +132,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 2px 20px rgba(28,26,22,0.07);
+      box-shadow: 0 2px 20px rgba(28, 26, 22, 0.07);
     }
 
     .search-inner {
@@ -142,10 +149,14 @@
     }
 
     @media (max-width: 768px) {
-      .search-grid { grid-template-columns: 1fr; }
+      .search-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
-    .form-group { position: relative; }
+    .form-group {
+      position: relative;
+    }
 
     .form-label {
       display: block;
@@ -157,7 +168,8 @@
       margin-bottom: 6px;
     }
 
-    .form-select, .form-input {
+    .form-select,
+    .form-input {
       width: 100%;
       padding: 11px 16px;
       font-family: var(--ff-sans);
@@ -173,12 +185,18 @@
       cursor: pointer;
     }
 
-    .form-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235A5649' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 38px; }
+    .form-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235A5649' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 38px;
+    }
 
-    .form-select:focus, .form-input:focus {
+    .form-select:focus,
+    .form-input:focus {
       border-color: var(--clr-gold);
       background: var(--clr-white);
-      box-shadow: 0 0 0 3px rgba(184,134,11,0.12);
+      box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.12);
     }
 
     .form-select:disabled {
@@ -186,7 +204,9 @@
       cursor: not-allowed;
     }
 
-    .form-input::placeholder { color: var(--clr-ink-faint); }
+    .form-input::placeholder {
+      color: var(--clr-ink-faint);
+    }
 
     .search-icon {
       position: absolute;
@@ -260,10 +280,12 @@
     .tag:hover {
       transform: translateY(-2px) scale(1.05);
       filter: brightness(1.05);
-      box-shadow: 0 4px 12px rgba(28,26,22,0.15);
+      box-shadow: 0 4px 12px rgba(28, 26, 22, 0.15);
     }
 
-    .tag:active { transform: scale(0.97); }
+    .tag:active {
+      transform: scale(0.97);
+    }
 
     /* ── Results Area ── */
     .results-header {
@@ -330,7 +352,7 @@
       left: 0;
       right: 0;
       height: 60px;
-      background: linear-gradient(to top, rgba(28,26,22,0.18), transparent);
+      background: linear-gradient(to top, rgba(28, 26, 22, 0.18), transparent);
       pointer-events: none;
     }
 
@@ -389,10 +411,18 @@
       color: var(--clr-ink-faint);
       line-height: 1.55;
       margin-top: 2px;
+
+      /* 現代標準寫法 */
       display: -webkit-box;
+      /* 舊版 Safari/Chrome 相容 */
       -webkit-line-clamp: 2;
+      /* 舊版相容，仍需保留 */
       -webkit-box-orient: vertical;
+      /* 舊版相容，仍需保留 */
       overflow: hidden;
+
+      /* 現代瀏覽器標準（Chrome 114+, Firefox 126+） */
+      line-clamp: 2;
     }
 
     .card-footer {
@@ -424,7 +454,9 @@
       border-color: var(--clr-ink);
     }
 
-    .btn-detail:active { transform: scale(0.98); }
+    .btn-detail:active {
+      transform: scale(0.98);
+    }
 
     /* ── Empty / Loading States ── */
     .state-empty {
@@ -518,8 +550,15 @@
 
     /* ── Animate cards in ── */
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .hotel-card {
@@ -534,10 +573,22 @@
     }
 
     /* ── Scrollbar ── */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--clr-cream); }
-    ::-webkit-scrollbar-thumb { background: var(--clr-cream-dark); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--clr-ink-faint); }
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--clr-cream);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--clr-cream-dark);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--clr-ink-faint);
+    }
   </style>
 </head>
 
@@ -575,8 +626,10 @@
           <label class="form-label" for="keyword">關鍵字搜尋</label>
           <div style="position: relative;">
             <input type="text" id="keyword" class="form-input" placeholder="輸入旅館名稱、地址或特色…">
-            <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-              <circle cx="8.5" cy="8.5" r="5.5"/><path d="M13.5 13.5L17 17"/>
+            <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round">
+              <circle cx="8.5" cy="8.5" r="5.5" />
+              <path d="M13.5 13.5L17 17" />
             </svg>
           </div>
         </div>
@@ -637,19 +690,19 @@
 
     /* ── Keyword cloud data ── */
     const d3Keywords = [
-      { text: '溫泉',  size: 52, h: 12 },
-      { text: '海景',  size: 44, h: 28 },
-      { text: '親子',  size: 40, h: 48 },
-      { text: '捷運',  size: 36, h: 68 },
-      { text: '國際',  size: 48, h: 180 },
-      { text: '民宿',  size: 34, h: 200 },
-      { text: '山景',  size: 38, h: 220 },
-      { text: '露營',  size: 30, h: 135 },
-      { text: '古蹟',  size: 28, h: 310 },
-      { text: '文創',  size: 32, h: 280 },
+      { text: '溫泉', size: 52, h: 12 },
+      { text: '海景', size: 44, h: 28 },
+      { text: '親子', size: 40, h: 48 },
+      { text: '捷運', size: 36, h: 68 },
+      { text: '國際', size: 48, h: 180 },
+      { text: '民宿', size: 34, h: 200 },
+      { text: '山景', size: 38, h: 220 },
+      { text: '露營', size: 30, h: 135 },
+      { text: '古蹟', size: 28, h: 310 },
+      { text: '文創', size: 32, h: 280 },
       { text: '自行車', size: 26, h: 30 },
-      { text: '夜市',  size: 30, h: 170 },
-      { text: '賞鯨',  size: 26, h: 195 },
+      { text: '夜市', size: 30, h: 170 },
+      { text: '賞鯨', size: 26, h: 195 },
     ];
 
     function renderD3Cloud() {
@@ -674,7 +727,7 @@
         .style("color", (d, i) => palette[i % palette.length].fg)
         .style("line-height", "1")
         .text(d => d.text)
-        .on("click", function(event, d) {
+        .on("click", function (event, d) {
           Swal.fire({
             title: `以「${d.text}」搜尋？`,
             icon: "question",
@@ -690,14 +743,14 @@
             }
           });
         })
-        .on("mouseover", function() { d3.select(this).style("opacity", 0.82); })
-        .on("mouseout",  function() { d3.select(this).style("opacity", 1); });
+        .on("mouseover", function () { d3.select(this).style("opacity", 0.82); })
+        .on("mouseout", function () { d3.select(this).style("opacity", 1); });
     }
 
     /* ── Load City Data ── */
     $.ajax({
       type: "GET", url: "js/json/CityCountyData.json", dataType: "json",
-      success: function(data) {
+      success: function (data) {
         CityCountyData = data;
         data.forEach(item => {
           $("#city").append(`<option value="${item.CityName}">${item.CityName}</option>`);
@@ -708,11 +761,11 @@
     /* ── Load Hotel Data ── */
     $.ajax({
       type: "GET", url: "js/json/HotelList.json", dataType: "json",
-      success: function(data) { hoteldata = normalize(data.Hotels); }
+      success: function (data) { hoteldata = normalize(data.Hotels); }
     });
 
     /* ── City Change ── */
-    $("#city").change(function() {
+    $("#city").change(function () {
       selected_city = $(this).val();
       selected_area = "";
       $("#area").prop("disabled", false).empty()
@@ -726,21 +779,21 @@
     });
 
     /* ── Area Change ── */
-    $("#area").change(function() {
+    $("#area").change(function () {
       selected_area = $(this).val();
       currentPage = 1;
       applyFilter();
     });
 
     /* ── Keyword Change ── */
-    $("#keyword").on("input change", function() {
+    $("#keyword").on("input change", function () {
       keyword = $(this).val().trim();
       currentPage = 1;
       applyFilter();
     });
 
     /* ── Pagination Clicks ── */
-    $(document).on("click", ".page-link", function(e) {
+    $(document).on("click", ".page-link", function (e) {
       e.preventDefault();
       const page = $(this).data("page");
       if (!page) return;
@@ -756,22 +809,22 @@
     /* ── Normalize ── */
     function normalize(data) {
       return data.map(item => ({
-        Name:          (item.HotelName ?? "").trim() || "未提供名稱",
-        City:          (item.PostalAddress?.City ?? "").trim() || "—",
-        Town:          (item.PostalAddress?.Town ?? "").trim() || "—",
+        Name: (item.HotelName ?? "").trim() || "未提供名稱",
+        City: (item.PostalAddress?.City ?? "").trim() || "—",
+        Town: (item.PostalAddress?.Town ?? "").trim() || "—",
         StreetAddress: (item.PostalAddress?.StreetAddress ?? "").trim() || "—",
-        Tel:           (item.Telephones?.[0]?.Tel ?? "").trim() || "未提供",
-        Hostwords:     (item.Description ?? "").trim() || "",
-        ImgURL:        (item.Images?.[0]?.URL ?? "").trim() || "image/None.jpg"
+        Tel: (item.Telephones?.[0]?.Tel ?? "").trim() || "未提供",
+        Hostwords: (item.Description ?? "").trim() || "",
+        ImgURL: (item.Images?.[0]?.URL ?? "").trim() || "image/None.jpg"
       }));
     }
 
     /* ── Apply Filter ── */
     function applyFilter() {
       currentFilteredData = hoteldata.filter(item => {
-        const matchCity    = !selected_city || item.City === selected_city;
-        const matchArea    = !selected_area || item.Town === selected_area;
-        const text         = `${item.Name}${item.City}${item.Town}${item.StreetAddress}${item.Tel}${item.Hostwords}`;
+        const matchCity = !selected_city || item.City === selected_city;
+        const matchArea = !selected_area || item.Town === selected_area;
+        const text = `${item.Name}${item.City}${item.Town}${item.StreetAddress}${item.Tel}${item.Hostwords}`;
         const matchKeyword = !keyword || text.includes(keyword);
         return matchCity && matchArea && matchKeyword;
       });
@@ -866,7 +919,8 @@
     }
 
     /* ── Init ── */
-    $(document).ready(function() { renderD3Cloud(); });
+    $(document).ready(function () { renderD3Cloud(); });
   </script>
 </body>
+
 </html>

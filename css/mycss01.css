@@ -1,0 +1,166 @@
+/* 字體 */
+@import url('https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC&display=swap');
+
+body {
+    font-family: "LXGW WenKai Mono TC", monospace;
+}
+
+/* 配色 */
+:root {
+    --Testcolor01: #F8F9FA;
+    --Testcolor02: #CED4DA;
+    --Testcolor03: #6C757D;
+    --Testcolor04: #212529;
+    --Testcolor05: #513b75a9;
+    --Testcolor06: #110b1ba9;
+    --Testcolor07: rgb(200, 223, 243);
+    --Testcolor08: #221691a9;
+}
+
+/* 文字相關 */
+.fw-300 {
+    font-weight: 300;
+}
+
+.fw-400 {
+    font-weight: 400;
+}
+
+.fw-700 {
+    font-weight: 700;
+}
+
+.title-01 {
+    font-size: 48px;
+    font-weight: 750;
+    color: var(--Testcolor08);
+    text-shadow:
+        2px 2px var(--Testcolor03),
+        4px 4px 8px rgba(0, 0, 0, 0.5);
+    letter-spacing: 3px;
+}
+
+.title-02 {
+    font-size: 36px;
+    font-weight: 400;
+    color: var(--Testcolor07);
+}
+
+.title-03 {
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--Testcolor02);
+}
+
+.roller {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.roller .roller_box-u {
+    position: absolute;
+    width: 100%;
+    top: -100%;
+    bottom: auto;
+    height: 100%;
+    right: 0;
+
+    /* 深邃曜石 × 宇宙靛藍 */
+    background: linear-gradient(135deg, 
+            rgba(15, 15, 25, 0.85), 
+            rgba(35, 45, 85, 0.75));
+
+    transition: top 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* 強化的暗色玻璃質感 */
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+
+    /* 內陰影：營造深度感與微光邊緣 */
+    box-shadow: 
+        inset 0 0 80px rgba(0, 0, 0, 0.4),
+        inset 0 0 2px rgba(255, 255, 255, 0.1);
+
+    /* 邊界層次 */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+}
+
+.roller .roller_box-l {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+
+    /* 海洋藍 × 日落紫 */
+    background: linear-gradient(135deg,
+            rgba(30, 144, 255, 0.35),
+            rgba(138, 43, 226, 0.35));
+
+    right: -100%;
+    transition: right 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* 玻璃質感 */
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+
+    /* 柔光效果 */
+    box-shadow: inset 0 0 120px rgba(255, 255, 255, 0.15);
+
+    /* 增加層次感 */
+    border-radius: 12px;
+}
+
+.roller .roller_box-r {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+
+    /* 森林綠 × 海岸藍 */
+    background: linear-gradient(135deg,
+            rgba(34, 193, 195, 0.35),
+            rgba(253, 187, 45, 0.35));
+
+    left: -100%;
+    transition: left 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+
+    box-shadow: inset 0 0 120px rgba(255, 255, 255, 0.15);
+
+    border-radius: 12px;
+}
+
+.roller:hover .roller_box-u {
+    top: 0;
+}
+
+.roller:hover .roller_box-l {
+    right: 0;
+}
+
+.roller:hover .roller_box-r {
+    left: 0;
+}
+
+.content_box {
+    margin-top: 15px;
+    padding: 10px;
+    box-shadow: 2px 2px 6px 2px var(--Testcolor06);
+    border-radius: 15px;
+}

@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>飯店檢索</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/mycss01.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/mycss01.css">
 
     <style>
         #d3_wordcloud {
@@ -100,9 +100,9 @@
 
     </div>
 
-    <script src="../js/bootstrap.bundle.min.js"></script>
-    <script src="../js/jquery-4.0.0.js"></script>
-    <script src="../js/sweetalert2.all.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery-4.0.0.js"></script>
+    <script src="js/sweetalert2.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -177,7 +177,7 @@
 
         $.ajax({
             type: "GET",
-            url: "../js/json/CityCountyData.json",
+            url: "js/json/CityCountyData.json",
             dataType: "json",
             success: function (data) {
                 CityCountyData = data;
@@ -193,7 +193,7 @@
 
         $.ajax({
             type: "GET",
-            url: "../js/json/HotelList.json",
+            url: "js/json/HotelList.json",
             dataType: "json",
             success: function (data) {
                 hoteldata = normalize(data.Hotels);
@@ -266,7 +266,7 @@
                     StreetAddress: streetAddress === "" ? "未提供名稱" : streetAddress,
                     Tel: tel === "" ? "未提供名稱" : tel,
                     Hostwords: hostwords === "" ? "未提供名稱" : hostwords,
-                    ImgURL: imgUrl === "" ? "../image/None.jpg" : imgUrl
+                    ImgURL: imgUrl === "" ? "image/None.jpg" : imgUrl
                 };
             });
             // }).filter(function(item){

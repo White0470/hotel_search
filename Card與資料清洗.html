@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>飯店檢索</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/mycss01.css">
+
+    <style>
+        #d3_wordcloud {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.5;
+        }
+
+        .tag:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .tag {
+                flex: 0 0 30%;
+                text-align: center;
+                margin: 10px 0 !important;
+                font-size: 24px !important;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .tag {
+                flex: 0 0 auto;
+                /* 寬度自動 */
+                margin: 0 15px !important;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <div class="title-01 text-center" id="mytitle">Card 資料清洗範例</div>
+    <div class="container">
+        <div class="title-03">資料來源: HotelList.json</div>
+
+        <div class="row mt-3">
+            <div class="col-md-4 mt-3">
+                <select name="" id="city" class="form-select form-select-lg">
+                    <option value="!!" class="text-center" disabled selected>--請指定城市--</option>
+                </select>
+            </div>
+            <div class="col-md-4  mt-3">
+                <select name="" id="area" class="form-select form-select-lg" disabled>
+                    <option value="!!" class="text-center" disabled selected>--請指定地區--</option>
+                </select>
+            </div>
+            <div class="col-md-4 mt-3">
+                <input type="text" name="" id="keyword" class="form-control form-control-lg" placeholder="輸入關鍵字搜尋:">
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center my-3" id="pagination">
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!-- <div class="row mt-4">
+            <div class="col-12 text-center">
+                <h5>熱門關鍵字雲</h5>
+                <canvas id="my_wordcloud" width="800" height="300"
+                    style="width: 100%; border: 1px solid #eee;"></canvas>
+            </div>
+        </div> -->
+
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <h5>熱門關鍵字</h5>
+                <div id="d3_wordcloud" class="d-flex flex-wrap justify-content-center align-items-center"
+                    style="width: 100%; min-height: 80px; background: #f8f9fa;">
+                </div>
+            </div>
+        </div>
+
+        <div class="row" id="hotellist">
+            <div class="row">
+                <div class="col-12 text-center text-secondary mt-5">
+                    請先選擇縣市和地區或輸入關鍵字搜尋
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../js/jquery-4.0.0.js"></script>
+    <script src="../js/sweetalert2.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jasondavies/d3-cloud/build/d3.layout.cloud.js"></script>
+
+    <script>
+        let CityCountyData;
+
+        let selected_city = "";
+        let selected_area = "";
+        let keyword = "";
+
+        let currentPage = 1;
+        let pageSize = 12;
+        let currentFilteredData = [];
+
+        let resultdata;
+        let strHTML;
+
+        let hoteldata = [];
+
+        const d3Keywords = [
+            { text: '國際', size: 50 },
+            { text: '娛樂', size: 40 },
+            { text: '溫泉', size: 35 },
+            { text: '捷運', size: 30 },
+            { text: '親子', size: 28 }
+        ];
+
+        function renderD3Cloud() {
+            const container = d3.select("#d3_wordcloud");
+            container.html(""); // 清空容器
+
+            const fill = d3.scaleOrdinal(d3.schemeCategory10);
+
+            const tags = container.selectAll(".tag")
+                .data(d3Keywords)
+                .enter()
+                .append("span")
+                .attr("class", "tag")
+                .style("font-size", d => `${d.size}px`)
+                .style("color", (d, i) => fill(i))
+                .style("font-family", "Microsoft JhengHei")
+                .style("font-weight", "bold")
+                .style("cursor", "pointer")
+                .style("display", "inline-block")
+                .style("transition", "opacity 0.2s")
+                .text(d => d.text)
+
+                .on("click", function (event, d) {
+                    Swal.fire({
+                        title: "搜尋關鍵字：" + d.text,
+                        showCancelButton: true,
+                        icon: "success",
+                        confirmButtonText: "確認",
+                        denyButtonText: `Don't save`
+                    }).then((result) => {
+                        if (result.isConfirmed) $("#keyword").val(d.text).trigger('change');
+                    });
+                })
+                .on("mouseover", function () {
+                    d3.select(this).style("opacity", 0.7);
+                })
+                .on("mouseout", function () {
+                    d3.select(this).style("opacity", 1);
+                });
+        }
+
+        $(document).ready(function () {
+            renderD3Cloud();
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "../js/json/CityCountyData.json",
+            dataType: "json",
+            success: function (data) {
+                CityCountyData = data;
+                data.forEach(function (item) {
+                    strHTML = `<option value="${item.CityName}">${item.CityName}</option>`;
+                    $("#city").append(strHTML);
+                });
+            },
+            error: function () {
+                console.log("error");
+            }
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "../js/json/HotelList.json",
+            dataType: "json",
+            success: function (data) {
+                hoteldata = normalize(data.Hotels);
+            },
+            error: function () {
+                console.log("error");
+            }
+        });
+
+        $("#city").change(function () {
+            selected_city = $(this).val();
+            $("#area").prop("disabled", false);
+            $("#area").empty();
+            $("#area").append(`<option value="!!" class="text-center" disabled selected>--請指定地區--</option>`);
+            CityCountyData.filter(function (item) {
+                return item.CityName === selected_city
+            })[0].AreaList.forEach(function (town) {
+                strHTML = `<option value="${town.AreaName}">${town.AreaName}</option>`;
+                $("#area").append(strHTML);
+            });
+        });
+
+        $("#area").change(function () {
+            selected_area = $(this).val();
+            currentPage = 1;
+            applyFilter();
+        });
+
+        $("#keyword").change("input", function () {
+            keyword = $(this).val().trim();
+            currentPage = 1;
+            applyFilter();
+        });
+
+        $(document).on("click", ".page-link", function (e) {
+            e.preventDefault();
+
+            let page = $(this).data("page");
+            if (!page) return;
+
+            const totalPage = Math.ceil(currentFilteredData.length / pageSize);
+
+            if (page === "prev") {
+                if (currentPage > 1) currentPage--;
+                else return;
+            }
+            else if (page === "next") {
+                if (currentPage < totalPage) currentPage++;
+                else return;
+            }
+            else currentPage = parseInt(page);
+
+            showdata(currentFilteredData);
+            renderPagination(currentFilteredData);
+        });
+
+        function normalize(data) {
+            return data.map(function (item) {
+                const name = (item.HotelName ?? "").trim();
+                const city = (item.PostalAddress.City ?? "").trim();
+                const town = (item.PostalAddress.Town ?? "").trim();
+                const streetAddress = (item.PostalAddress.StreetAddress ?? "").trim();
+                const tel = (item.Telephones[0].Tel ?? "").trim();
+                const hostwords = (item.Description ?? "").trim();
+                const imgUrl = (item.Images[0]?.URL ?? "").trim();
+                return {
+                    Name: name === "" ? "未提供名稱" : name,
+                    City: city === "" ? "未提供名稱" : city,
+                    Town: town === "" ? "未提供名稱" : town,
+                    StreetAddress: streetAddress === "" ? "未提供名稱" : streetAddress,
+                    Tel: tel === "" ? "未提供名稱" : tel,
+                    Hostwords: hostwords === "" ? "未提供名稱" : hostwords,
+                    ImgURL: imgUrl === "" ? "../images/1743333216862.jpg" : imgUrl
+                };
+            });
+            // }).filter(function(item){
+            //     return item.ImgURL != "未提供圖片";
+            // });
+        }
+
+        function applyFilter() {
+            const result = hoteldata.filter(function (item) {
+                const matchCity = selected_city === "" || item.City === selected_city;
+                const matchArea = selected_area === "" || item.Town === selected_area;
+                const text = `${item.Name}${item.City}${item.Town}${item.StreetAddress}${item.Tel}${item.Hostwords}`;
+                const matchkeyword = keyword === "" || text.includes(keyword);
+                return matchCity && matchArea && matchkeyword;
+            });
+
+            currentFilteredData = result;
+            showdata(currentFilteredData);
+            renderPagination(currentFilteredData);
+        }
+
+        function showdata(data) {
+
+            $("#hotellist").empty();
+
+            if (data.length === 0) {
+                $("#hotellist").append(`<div class="col-12 text-center text-warning mt-5">
+                                查無符合資料
+                            </div>`);
+                return;
+            }
+
+            const startIndex = (currentPage - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
+            const pageData = data.slice(startIndex, endIndex);
+
+            pageData.forEach(function (item) {
+                let strHTML = `<div class="col-md-6 col-lg-4 col-xxl-3 mt-3">
+                                <div class="card shadow-lg h-100">
+                                    <div style="background-image: url(${item.ImgURL}); height: 200px; background-position: center center; background-size: cover;"></div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">${item.Name}</h5>
+                                        <p class="card-text">地址: ${item.City + item.Town + item.StreetAddress}</p>
+                                        <p class="card-text">電話: ${item.Tel}</p>
+                                        <p class="card-text">簡介: ${item.Hostwords.substring(0, 20)}</p>
+                                        <a href="#" class="btn btn-primary w-100">查看更多</a>
+                                    </div>
+                                </div>
+                            </div>`;
+                $("#hotellist").append(strHTML);
+            });
+        }
+
+        function renderPagination(data) {
+            $("#pagination").empty();
+            const totalPage = Math.ceil(data.length / pageSize);
+
+            if (data.length === 0 || totalPage <= 1) return;
+
+            const appendPageItem = (p, label, active = false, disabled = false) => {
+                let activeClass = active ? "active" : "";
+                let disabledClass = disabled ? "disabled" : "";
+                let pageData = (label === "...") ? "" : p;
+
+                $("#pagination").append(`
+                    <li class="page-item ${activeClass} ${disabledClass}">
+                        <a class="page-link" href="#" data-page="${pageData}">${label}</a>
+                    </li>
+                `);
+            };
+
+            appendPageItem(currentPage - 1, "Previous", false, currentPage === 1);
+
+            const range = 2; // 當前頁碼左右各顯示2頁
+            let showPages = [];
+
+            for (let i = 1; i <= totalPage; i++) {
+                if (
+                    i === 1 ||
+                    i === totalPage ||
+                    (i >= currentPage - range && i <= currentPage + range)
+                ) {
+                    showPages.push(i);
+                }
+            }
+
+            let prev = 0;
+            for (let i of showPages) {
+                if (i - prev > 1) {
+                    appendPageItem(null, "...", false, true);
+                }
+                appendPageItem(i, i, i === currentPage);
+                prev = i;
+            }
+
+            appendPageItem(currentPage + 1, "Next", false, currentPage === totalPage);
+        }
+
+    </script>
+</body>
+
+</html>
